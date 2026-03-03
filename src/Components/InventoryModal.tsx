@@ -17,6 +17,7 @@ type InventoryFormData = {
   location: {
     name: string;
   };
+  
 };
 
 export default function InventoryModal({
@@ -33,6 +34,7 @@ export default function InventoryModal({
     location: {
       name: "",
     },
+  
   });
   const [isloading, setIsLoading] = useState(false);
 
@@ -57,27 +59,36 @@ export default function InventoryModal({
     }
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      console.log("try to post");
-      const response = await axiosInstance.post(
-        API_PATHS.INVENTORY.INSERT,
-        formData,
-      );
-      alert("Inventory added successfully!");
-      if (response.data.success) {
-        onSuccess(); // refresh table
-        onClose(); // close modal
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong!");
-    } finally {
-      setIsLoading(false);
+ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  try {
+    const payLoad = {
+      ...formData,
+      status: "Pending",
+    };
+
+    const response = await axiosInstance.post(
+      API_PATHS.INVENTORY.INSERT,
+      payLoad
+    );
+
+    console.log("Response:", response);
+
+    // 👇 Safe optional chaining
+    if (response?.data?.success) {
+      onSuccess();
+      onClose();
     }
-  };
+
+  } catch (error) {
+    console.error("Submit error:", error);
+    alert("Something went wrong!");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   if (!isOpen) return null;
 
@@ -140,6 +151,8 @@ export default function InventoryModal({
             onChange={handleChange}
             className="border p-2 rounded"
           />
+         
+
 
           <div className="flex justify-between mt-4">
             <button

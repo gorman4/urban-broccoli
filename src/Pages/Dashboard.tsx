@@ -5,6 +5,8 @@ import { useAuth } from "../Hooks/useAuth";
 import InventoryModal from "../Components/InventoryModal";
 import axiosInstance from "../Lib/axiosInstance";
 import { API_PATHS } from "../Lib/apiPath";
+import { IoPlay } from "react-icons/io5";
+import { IoPauseSharp } from "react-icons/io5";
 
 type Inventory = {
   _id: string;
@@ -22,7 +24,7 @@ type Inventory = {
   };
   createdAt: string;
   updatedAt: string;
-  status?: string; // you'll add this later in backend
+  status: string; 
 };
 
 const Dashboard = () => {
@@ -30,6 +32,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchInventories = async () => {
+    console.log("Fetching Database links")
   try {
     setLoading(true);
 
@@ -37,6 +40,7 @@ const Dashboard = () => {
 
     if (response.data.success) {
       setParcelList(response.data.data);
+      console.log(response.data.data)
     }
   } catch (error) {
     console.error("Error fetching inventories:", error);
@@ -106,10 +110,13 @@ useEffect(() => {
               <thead className="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
                 <tr>
                   <th className="px-6 py-4">Tracking No</th>
+                   <th className="px-6 py-4">Item Name</th>
                   <th className="px-6 py-4 hidden md:table-cell">
                     Current Location
                   </th>
+                  <th className="px-6 py-4"></th>
                   <th className="px-6 py-4">Status</th>
+                  
                   <th className="px-6 py-4 text-right">Action</th>
                 </tr>
               </thead>
@@ -126,15 +133,24 @@ useEffect(() => {
                       <td className="px-6 py-4 font-medium text-gray-800">
                         {item.tracknumber}
                       </td>
+                         <td className="px-6 py-4 font-medium text-gray-800">
+                        {item.itemname}
+                      </td>
 
                       <td className="px-6 py-4 hidden md:table-cell text-gray-600">
                         {item.currentposition}
+                      </td>
+                      <td>
+                        {
+                          item.status=== "Pending" ? <IoPlay className="text-green-700 cursor-pointer"/>:<IoPauseSharp className="text-green-700 cursor-pointer"/>
+                        }
+                        
                       </td>
 
                       <td className="px-6 py-4">
                         {(() => {
                           const statusStyle = getStatusStyles(
-                            item.status || "pending",
+                            item.status
                           );
 
                           return (
