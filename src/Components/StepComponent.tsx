@@ -24,7 +24,7 @@ export default function StepComponent() {
             </h6>
           </div>
 
-          <a href="#" className="underline hover:text-gray-200">
+          <a href="/storage?storage=parking" className="underline hover:text-gray-200">
             READ MORE
           </a>
         </div>
@@ -49,7 +49,7 @@ export default function StepComponent() {
             </h6>
           </div>
 
-          <a href="#" className="underline hover:text-gray-200">
+          <a href="/storage?storage=landing" className="underline hover:text-gray-200">
             READ MORE
           </a>
         </div>
@@ -74,7 +74,7 @@ export default function StepComponent() {
             </h6>
           </div>
 
-          <a href="#" className="underline hover:text-gray-200">
+          <a href="/storage?storage=delivery" className="underline hover:text-gray-200">
             READ MORE
           </a>
         </div>

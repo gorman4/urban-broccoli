@@ -1,29 +1,33 @@
 import NumberCaption from "./NumberCaption";
-import Slider5 from "../assets/slide5.jpg";
+import Strategy from "../assets/strategy.jpg"
 import Slider7 from "../assets/slide7.jpeg";
+import ConflictPic from "../assets/burningShip.webp"
+import Demograph from "../assets/demograph.jpg"
 
 const newsData = [
   { id:1,
-    img: Slider5 ,
+    img: Demograph ,
     title:"Social and demographic information",
-    message:"There are no hidden costs associated with our transportation services."
+    message:"There are no hidden costs associated with our transportation services..."
 
   },
   { 
     id:2,
     img: Slider7,
     title:"Team member to discuss our meeting",
-    message:"Offers you peace-of-mind that we’ll be on-hand to help whenever you need us."
+    message:"Offers you peace-of-mind that we’ll be on-hand to help whenever you need us..."
    },
   { 
     id:3,
-    img: Slider5,
+    img: Strategy,
     title:"Financial Institutions changes control",
-    message:"As a company, we believe in operating as independent national carriers."
+    message:"As a company, we believe in operating as independent national carriers..."
    },
   { id:4,
-    title:"",
-    img: Slider7 },
+    title:"Oil prices soar as Iran’s attack on ships",
+    img: ConflictPic,
+    message:"Spike follows claims Iran’s Revolutionary Guards struck three oil tankers..."
+   },
 ];
 
 export default function LatestNews() {

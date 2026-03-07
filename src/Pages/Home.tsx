@@ -8,7 +8,7 @@ import PackingStorageComponent from "../Components/PackingStorageComponent";
 import RequestQuoteComponent from "../Components/RequestQuoteComponent";
 import SponsorComponent from "../Components/SponsorComponent";
 import TestimonialSection from "../Components/TestimonialSection";
-import Footer from '../Components/Footer'
+import Footer from "../Components/Footer";
 import TopBar from "../Components/TopBar";
 import TrackerComponent from "../Components/TrackerComponent";
 
@@ -33,8 +33,8 @@ function Home() {
         <SponsorComponent />
       </div>
       <AboutusComponent />
-    
-     <Footer/>
+
+      <Footer />
     </div>
   );
 }
