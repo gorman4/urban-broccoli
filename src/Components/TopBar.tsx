@@ -5,13 +5,15 @@ import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { IoChatbubbles } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AppSetting } from "../Lib/siteConfig";
+import { useNavigate } from "react-router-dom";
 
 
 export default function TopBar() {
+  const navigate = useNavigate()
   return (
     <div className=" h-25">
       <div className="flex  my-container items-center justify-between lg:justify-around">
-        <div className="w-45 ">
+        <div onClick={()=> navigate("/")} className="w-45 cursor-pointer ">
           <img src={Logo} className="w-90 h-30"/>
          
         </div>

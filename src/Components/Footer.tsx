@@ -7,8 +7,10 @@ import Logo from "../assets/logo.png";
 import AppStore from "../assets/icon-appstore.png";
 import GooglePlay from "../assets/icon-googleplay.png";
 import { BsFillTabletFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
   return (
     <div className="w-full h-full bg-primary ">
       <div className="my-container my-5">
@@ -30,7 +32,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col lg:flex-row items-center lg:gap-30 gap-8">
-          <div>
+         <div onClick={()=> navigate("/")} className="w-45 cursor-pointer ">
             <img src={Logo} className="w-30 h-25"  />
           </div>
 

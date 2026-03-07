@@ -8,6 +8,7 @@ import Dashboard from "../Pages/Dashboard";
 import PublicRoute from "../Layouts/publicRoute";
 import PrivateRoute from "../Layouts/privateRoute";
 import Storage from "../Pages/Storage";
+import Update from "../Pages/Update";
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
         <Route element={<PublicRoute />}>
           <Route path="/" element={<Home />} />
          <Route path="/storage" element={<Storage/>} />
+          <Route path="/updates" element={<Update/>} />
           <Route path="/tracking" element={<TrackingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />

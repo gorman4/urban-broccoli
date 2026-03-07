@@ -8,25 +8,30 @@ const newsData = [
   { id:1,
     img: Demograph ,
     title:"Social and demographic information",
-    message:"There are no hidden costs associated with our transportation services..."
+    message:"There are no hidden costs associated with our transportation services...",
+    link:"/updates?field=demograph"
+
 
   },
   { 
     id:2,
     img: Slider7,
     title:"Team member to discuss our meeting",
-    message:"Offers you peace-of-mind that we’ll be on-hand to help whenever you need us..."
+    message:"Offers you peace-of-mind that we’ll be on-hand to help whenever you need us...",
+    link:"/updates?field=team"
    },
   { 
     id:3,
     img: Strategy,
     title:"Financial Institutions changes control",
-    message:"As a company, we believe in operating as independent national carriers..."
+    message:"As a company, we believe in operating as independent national carriers...",
+    link: "/updates?field=strategy"
    },
   { id:4,
     title:"Oil prices soar as Iran’s attack on ships",
     img: ConflictPic,
-    message:"Spike follows claims Iran’s Revolutionary Guards struck three oil tankers..."
+    message:"Spike follows claims Iran’s Revolutionary Guards struck three oil tankers...",
+    link: "/updates?field=conflict"
    },
 ];
 
@@ -61,7 +66,7 @@ export default function LatestNews() {
               </p>
 
               <a
-                href="#"
+                href={item.link}
                 className="mt-2 w-fit text-sm font-semibold text-primary transition hover:underline"
               >
                 READ MORE →
