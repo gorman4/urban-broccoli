@@ -1,5 +1,6 @@
 import { GiTrophyCup } from "react-icons/gi";
 import { TbUmbrellaFilled } from "react-icons/tb";
+import { AppSetting } from "../Lib/siteConfig";
 // import Slide7 from "../assets/slide7.jpeg"
 
 export default function AboutusComponent() {
@@ -8,10 +9,10 @@ export default function AboutusComponent() {
         <div className="my-container text-white flex">
                 <div className="bg-amber-600 p-8">
 
-                    <h2 className="font-bold text-white py-4">ABOUT Compecinp Logistics</h2>
+                    <h2 className="font-bold text-white py-4">ABOUT {AppSetting.appName}</h2>
                       <div className="w-full">
                         <p>We have trained, experienced experts available for our full range of service
-                            Including reefer, out-of-gauge, breakbulk and each of our trade services- each ooperating in tande, with your business. This gives us the ability to uphold the personal service we're globally recognized 
+                            Including reefer, out-of-gauge, break bulk and each of our trade services- each operating in tande, with your business. This gives us the ability to uphold the personal service we're globally recognized 
                         </p>
                         
                         </div>  
@@ -24,7 +25,7 @@ export default function AboutusComponent() {
                            <GiTrophyCup size={50}/>
                             <div>
                                 <h6>GETTED AWARDS</h6>
-                                <h4>+1.246</h4>
+                                <h4 className="font-bold">+1.246</h4>
                             </div>
 
                             </div>
@@ -35,7 +36,7 @@ export default function AboutusComponent() {
                                 </div>
                                 <div>
                                     <h4>CARRIED PACKAGE</h4>
-                                    <h4>+2.638</h4>
+                                    <h4 className="font-bold">+2.638</h4>
                                 </div>
                             </div>
                         </div>

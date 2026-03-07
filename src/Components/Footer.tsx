@@ -29,9 +29,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-30">
+        <div className="flex flex-col lg:flex-row items-center lg:gap-30 gap-8">
           <div>
-            <img src={Logo} className="w-30" />
+            <img src={Logo} className="w-30 h-25"  />
           </div>
 
           <div>

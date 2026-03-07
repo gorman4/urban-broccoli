@@ -9,7 +9,7 @@ export default function StepComponent() {
       <div
         className="relative h-56 sm:h-60 lg:h-72 border overflow-hidden rounded-lg"
         style={{
-          backgroundImage: "url('/slide5.jpg')",
+          backgroundImage: "url('/landing_storage.jfif')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -34,7 +34,7 @@ export default function StepComponent() {
       <div
         className="relative h-56 sm:h-60 lg:h-72 border overflow-hidden rounded-lg"
         style={{
-          backgroundImage: "url('/slide7.jpeg')",
+          backgroundImage: "url('/parkspace_storage.jfif')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

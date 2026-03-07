@@ -29,12 +29,12 @@ type Inventory = {
 
 const Dashboard = () => {
   const [parcelList, setParcelList] = useState<Inventory[]>([]);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
 
   const fetchInventories = async () => {
     console.log("Fetching Database links")
   try {
-    setLoading(true);
+   // setLoading(true);
 
     const response = await axiosInstance.get(API_PATHS.INVENTORY.GETALL);
 
@@ -45,7 +45,7 @@ const Dashboard = () => {
   } catch (error) {
     console.error("Error fetching inventories:", error);
   } finally {
-    setLoading(false);
+    // setLoading(false);
   }
 };
 
@@ -85,9 +85,12 @@ useEffect(() => {
     }
   };
   //const [parcelList, setParcelList]= useState(null)
-  const { user, logout } = useAuth();
+  const {  logout } = useAuth();
 
-  console.log(user);
+ const handleChangeStatus =()=>{
+  
+
+ }
 
   const logOutUser = () => {
     logout();
@@ -140,7 +143,7 @@ useEffect(() => {
                       <td className="px-6 py-4 hidden md:table-cell text-gray-600">
                         {item.currentposition}
                       </td>
-                      <td>
+                      <td onClick={handleChangeStatus}>
                         {
                           item.status=== "Pending" ? <IoPlay className="text-green-700 cursor-pointer"/>:<IoPauseSharp className="text-green-700 cursor-pointer"/>
                         }
