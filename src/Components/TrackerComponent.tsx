@@ -1,6 +1,7 @@
+import type { TrackComponentProps } from "../Lib/data";
 
 
-export default function TrackerComponent() {
+export default function TrackerComponent({ismodalOpen}: TrackComponentProps) {
   return (
     <div className="relative z-10">
       <div className="absolute -top-10 lg:-top-30 lg:left-220">
@@ -41,6 +42,7 @@ export default function TrackerComponent() {
               hover:bg-cyan-800
               transition
             "
+            onClick={()=>ismodalOpen(true)}
           >
             Track Order
           </button>

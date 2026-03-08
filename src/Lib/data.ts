@@ -7,3 +7,10 @@ export type NumberHeaderProps = {
   num: string
 }
 
+export type TrackComponentProps = {
+  ismodalOpen: React.Dispatch<React.SetStateAction<boolean>>
+
+  
+
+}
+

@@ -11,16 +11,22 @@ import TestimonialSection from "../Components/TestimonialSection";
 import Footer from "../Components/Footer";
 import TopBar from "../Components/TopBar";
 import TrackerComponent from "../Components/TrackerComponent";
+import TrackingModal from "../Components/TrackingModal";
+import { useState } from "react";
 
 function Home() {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   return (
     <div className="bg-background pt-3">
       <TopBar />
       <Carousel />
-      <TrackerComponent />
+      <TrackerComponent ismodalOpen= {setOpenModal}  />
       <div className="mt-25">
         <NumberCaption desc="Packing & Storage" num={"01"} />
       </div>
+
+      {openModal && <TrackingModal ismodalOpen ={setOpenModal} />}
 
       <PackingStorageComponent />
       {/* <Caption title="Package & Strage"/> */}
