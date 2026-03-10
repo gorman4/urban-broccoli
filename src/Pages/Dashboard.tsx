@@ -24,7 +24,7 @@ type Inventory = {
   };
   createdAt: string;
   updatedAt: string;
-  status: string; 
+  status: string;
 };
 
 const Dashboard = () => {
@@ -32,65 +32,90 @@ const Dashboard = () => {
   //const [loading, setLoading] = useState(true);
 
   const fetchInventories = async () => {
-    console.log("Fetching Database links")
-  try {
-   // setLoading(true);
+    console.log("Fetching Database links");
+    try {
+      // setLoading(true);
 
-    const response = await axiosInstance.get(API_PATHS.INVENTORY.GETALL);
+      const response = await axiosInstance.get(API_PATHS.INVENTORY.GETALL);
 
-    if (response.data.success) {
-      setParcelList(response.data.data);
-      console.log(response.data.data)
+      if (response.data.success) {
+        setParcelList(response.data.data);
+        console.log(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching inventories:", error);
+    } finally {
+      // setLoading(false);
     }
-  } catch (error) {
-    console.error("Error fetching inventories:", error);
-  } finally {
-    // setLoading(false);
-  }
-};
+  };
 
-
-useEffect(() => {
-  fetchInventories();
-}, []);
-
+  useEffect(() => {
+    fetchInventories();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
-  const getStatusStyles = (status: string) => {
-    switch (status) {
+  const getStatusStyles = (status?: string) => {
+    const normalizedStatus = status?.toLowerCase() || "pending";
+
+    switch (normalizedStatus) {
       case "active":
         return {
           dot: "bg-green-500",
           text: "text-green-600",
           label: "Active",
         };
+
       case "pending":
         return {
           dot: "bg-yellow-400",
           text: "text-yellow-600",
           label: "Pending",
         };
+
       case "cancelled":
         return {
           dot: "bg-red-500",
           text: "text-red-600",
           label: "Cancelled",
         };
+
       default:
         return {
           dot: "bg-gray-400",
           text: "text-gray-600",
-          label: status,
+          label: status || "Unknown",
         };
     }
   };
   //const [parcelList, setParcelList]= useState(null)
-  const {  logout } = useAuth();
+  const { logout } = useAuth();
 
- const handleChangeStatus =()=>{
-  
+  const handleChangeStatus = async (id: string) => {
+    // find the parcel in state
+    const parcel = parcelList.find((item) => item.uuid === id);
 
- }
+    // stop if already active
+    if (parcel?.status?.toLowerCase() === "active") {
+      console.log("Parcel already active. No update needed.");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.patch(
+        `${API_PATHS.INVENTORY.ACTIVATE}${id}`,
+      );
+
+      const updatedStatus = response.data.data.status;
+
+      setParcelList((prev) =>
+        prev.map((item) =>
+          item.uuid === id ? { ...item, status: updatedStatus } : item,
+        ),
+      );
+    } catch (err) {
+      console.error("Error updating status:", err);
+    }
+  };
 
   const logOutUser = () => {
     logout();
@@ -113,48 +138,52 @@ useEffect(() => {
               <thead className="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
                 <tr>
                   <th className="px-6 py-4">Tracking No</th>
-                   <th className="px-6 py-4">Item Name</th>
+                  <th className="px-6 py-4">Item Name</th>
                   <th className="px-6 py-4 hidden md:table-cell">
                     Current Location
                   </th>
                   <th className="px-6 py-4"></th>
                   <th className="px-6 py-4">Status</th>
-                  
+
                   <th className="px-6 py-4 text-right">Action</th>
                 </tr>
               </thead>
 
               <tbody className="divide-y">
                 {parcelList.map((item) => {
-                //   const statusStyle = getStatusStyles(item?.status);
+                  //   const statusStyle = getStatusStyles(item?.status);
 
                   return (
                     <tr
-                      key={item._id}
+                      key={item.uuid}
                       className="hover:bg-gray-50 transition duration-200"
                     >
                       <td className="px-6 py-4 font-medium text-gray-800">
                         {item.tracknumber}
                       </td>
-                         <td className="px-6 py-4 font-medium text-gray-800">
+                      <td className="px-6 py-4 font-medium text-gray-800">
                         {item.itemname}
                       </td>
 
                       <td className="px-6 py-4 hidden md:table-cell text-gray-600">
                         {item.currentposition}
                       </td>
-                      <td onClick={handleChangeStatus}>
-                        {
-                          item.status=== "Pending" ? <IoPlay className="text-green-700 cursor-pointer"/>:<IoPauseSharp className="text-green-700 cursor-pointer"/>
+                      <td
+                        onClick={() =>
+                          item.status?.toLowerCase() !== "active" &&
+                          handleChangeStatus(item.uuid)
                         }
-                        
+                      >
+                        {item.status?.toLowerCase() === "pending" ? (
+                          <IoPlay className="text-green-700 cursor-pointer" />
+                        ) : (
+                          <IoPauseSharp className="text-gray-400 cursor-not-allowed" />
+                        )}
                       </td>
 
                       <td className="px-6 py-4">
                         {(() => {
-                          const statusStyle = getStatusStyles(
-                            item.status
-                          );
+                          const statusStyle = getStatusStyles(item.status);
 
                           return (
                             <div className="flex items-center gap-2">
@@ -208,7 +237,11 @@ useEffect(() => {
       >
         Logout
       </button>
-      <InventoryModal isOpen={isOpen} onClose={() => setIsOpen(false)}  onSuccess={fetchInventories}/>
+      <InventoryModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onSuccess={fetchInventories}
+      />
     </div>
   );
 };

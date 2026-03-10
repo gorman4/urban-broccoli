@@ -25,21 +25,31 @@ axiosInstance.interceptors.request.use(
 );
 
 //Response Interceptor
-axiosInstance.interceptors.response.use((response)=>{
-    return response
-},(error)=>{
-    //handle common error globally
-    if (error.response){
-        if (error.response.status=== 401){
-            //direct to login page
-            window.location.href="/login"
-        }else if (error.response.status === 500){
-            console.error("Server error.Please try again later.")
-        }else if (error.code ==="ECONNABORTED"){
-            console.error("Request timeout. Please try again.")
-        }
-        return Promise.reject(error);
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+
+      const requestUrl = error.config?.url;
+
+      // Only redirect to login if it's NOT the tracking endpoint
+      if (error.response.status === 401 && requestUrl !== API_PATHS.INVENTORY.TRACK) {
+        window.location.href = "/login";
+      }
+
+      if (error.response.status === 500) {
+        console.error("Server error. Please try again later.");
+      }
+
     }
-}
-)
+
+    if (error.code === "ECONNABORTED") {
+      console.error("Request timeout. Please try again.");
+    }
+
+    return Promise.reject(error);
+  }
+);
 export default axiosInstance

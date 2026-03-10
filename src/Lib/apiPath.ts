@@ -11,7 +11,9 @@ export const API_PATHS ={
             INSERT: "/api/v1/inventory",
             TRACK:"/api/v1/track",
             UPDATE:"/api/v1/update",
-            GETALL:"/api/v1/inventory"
+            GETALL:"/api/v1/inventory",
+            ACTIVATE:"/api/v1/activate?uuid="
+
 
         },
         QUOTE:{

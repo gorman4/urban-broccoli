@@ -16,17 +16,18 @@ import { useState } from "react";
 
 function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false);
+    const [trackingData, setTrackingData] = useState<any>(null);
 
   return (
     <div className="bg-background pt-3">
       <TopBar />
       <Carousel />
-      <TrackerComponent ismodalOpen= {setOpenModal}  />
+      <TrackerComponent ismodalOpen= {setOpenModal}  setTrackingData={setTrackingData}  />
       <div className="mt-25">
         <NumberCaption desc="Packing & Storage" num={"01"} />
       </div>
 
-      {openModal && <TrackingModal ismodalOpen ={setOpenModal} />}
+      {openModal && <TrackingModal ismodalOpen ={setOpenModal}  trackingData={trackingData} />}
 
       <PackingStorageComponent />
       {/* <Caption title="Package & Strage"/> */}

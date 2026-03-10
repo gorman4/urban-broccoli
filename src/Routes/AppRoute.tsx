@@ -23,6 +23,7 @@ export default function AppRoutes() {
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
          
+         
         </Route>
 
         {/* Private routes */}
