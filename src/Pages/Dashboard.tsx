@@ -7,6 +7,7 @@ import axiosInstance from "../Lib/axiosInstance";
 import { API_PATHS } from "../Lib/apiPath";
 import { IoPlay } from "react-icons/io5";
 import { IoPauseSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 type Inventory = {
   _id: string;
@@ -30,6 +31,8 @@ type Inventory = {
 const Dashboard = () => {
   const [parcelList, setParcelList] = useState<Inventory[]>([]);
   //const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate()
 
   const fetchInventories = async () => {
     console.log("Fetching Database links");
@@ -224,7 +227,9 @@ const Dashboard = () => {
                 Create Parcel
               </button>
 
-              <button className="w-full py-3 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition duration-200">
+              <button
+              onClick={()=> navigate("/location")} 
+              className="w-full py-3 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition duration-200">
                 Update Location
               </button>
             </div>

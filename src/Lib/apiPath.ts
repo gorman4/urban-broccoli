@@ -12,7 +12,8 @@ export const API_PATHS ={
             TRACK:"/api/v1/track",
             UPDATE:"/api/v1/update",
             GETALL:"/api/v1/inventory",
-            ACTIVATE:"/api/v1/activate?uuid="
+            ACTIVATE:"/api/v1/activate?uuid=",
+            UPDATELOCATION:"/api/v1/update"
 
 
         },

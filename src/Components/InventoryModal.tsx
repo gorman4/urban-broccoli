@@ -24,13 +24,11 @@ type InventoryFormData = {
   completion: number;
   delivery_mode: string;
 
-  item_image: string;
+  item_image: File | null;
 
   expected_delivery: string;
   current_position: string;
-  location: {
-    name: string;
-  };
+  location: string; // now a simple string
 };
 
 export default function InventoryModal({
@@ -46,36 +44,41 @@ export default function InventoryModal({
 
     weight: "",
     service: "",
-
-    completion: 0,
     delivery_mode: "",
+    completion: 0,
     expected_delivery: "",
+
     item_name: "",
     quantity: 0,
 
-    item_image: "",
+    item_image: null,
 
     origin: "",
     destination: "",
     current_position: "",
-    location: {
-      name: "",
-    },
+    location: "",
   });
-  const [isloading, setIsLoading] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+    if (name === "item_image" && files) {
+      console.log("Selected file:", files[0]);
 
-    if (name === "location_name") {
       setFormData((prev) => ({
         ...prev,
-        location: { name: value },
+        item_image: files[0],
       }));
     } else if (name === "quantity") {
       setFormData((prev) => ({
         ...prev,
         quantity: Number(value),
+      }));
+    } else if (name === "location") {
+      setFormData((prev) => ({
+        ...prev,
+        location: value,
       }));
     } else {
       setFormData((prev) => ({
@@ -90,25 +93,65 @@ export default function InventoryModal({
     setIsLoading(true);
 
     try {
-      const payLoad = {
-        ...formData,
-        status: "Pending",
-      };
+      const form = new FormData();
 
+      form.append("receiver_name", formData.receiver_name);
+      form.append("receiver_address", formData.receiver_address);
+      form.append("receiver_email", formData.receiver_email);
+      form.append("receiver_phone", formData.receiver_phone);
+
+      form.append("weight", formData.weight);
+      form.append("service", formData.service);
+      form.append("delivery_mode", formData.delivery_mode);
+      form.append("completion", String(formData.completion));
+      form.append("expected_delivery", formData.expected_delivery);
+
+      form.append("item_name", formData.item_name);
+      form.append("quantity", String(formData.quantity));
+
+      form.append("origin", formData.origin);
+      form.append("destination", formData.destination);
+      form.append("current_position", formData.current_position);
+
+      form.append("status", "Pending");
+      form.append("location", formData.location);
+
+      if (formData.item_image) {
+        form.append("item_image", formData.item_image);
+      }
+
+      for (let [key, value] of form.entries()) {
+        console.log(key, value);
+      }
       const response = await axiosInstance.post(
         API_PATHS.INVENTORY.INSERT,
-        payLoad,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // ← let axios set boundary automatically
+            // or even better — just remove this line completely
+          },
+        },
       );
 
-      console.log("Response:", response);
+      console.log("Response:", response.data);
 
-      // 👇 Safe optional chaining
       if (response?.data?.success) {
         onSuccess();
         onClose();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Submit error:", error);
+
+      if (error.response) {
+        console.log("Server Error:", error.response.data);
+        console.log("Status:", error.response.status);
+      } else if (error.request) {
+        console.log("No response received:", error.request);
+      } else {
+        console.log("Error Message:", error.message);
+      }
+
       alert("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -119,10 +162,14 @@ export default function InventoryModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-  <div className="bg-white p-6 rounded-lg w-[400px] max-h-[90vh] overflow-y-auto">
-    <h2 className="text-xl font-semibold mb-4">Add Inventory</h2>
+      <div className="bg-white p-6 rounded-lg w-[400px] max-h-[90vh] overflow-y-auto">
+        <h2 className="text-xl font-semibold mb-4">Add Inventory</h2>
 
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <form
+          encType="multipart/form-data"
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-3"
+        >
           <input
             type="text"
             name="receiver_name"
@@ -139,7 +186,6 @@ export default function InventoryModal({
             onChange={handleChange}
             className="border p-2 rounded"
           />
-
           <input
             type="text"
             name="receiver_email"
@@ -181,16 +227,21 @@ export default function InventoryModal({
             onChange={handleChange}
             className="border p-2 rounded"
           />
+
+          <div className="flex items-end gap-2">
+            <input
+              type="number"
+              name="completion"
+              placeholder="Enter Percentage"
+              value={formData.completion}
+              onChange={handleChange}
+              className="border p-2 rounded flex-1"
+            />
+            <span className="font-bold">% completed</span>
+          </div>
+
           <input
-            type="text"
-            name="completion"
-            placeholder="Enter Percentage"
-            value={formData.completion}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-          <input
-            type="text"
+            type="date"
             name="expected_delivery"
             placeholder="Enter delivery date"
             value={formData.expected_delivery}
@@ -224,7 +275,6 @@ export default function InventoryModal({
             onChange={handleChange}
             className="border p-2 rounded"
           />
-
           <input
             type="text"
             name="destination"
@@ -233,7 +283,6 @@ export default function InventoryModal({
             onChange={handleChange}
             className="border p-2 rounded"
           />
-
           <input
             type="text"
             name="current_position"
@@ -245,20 +294,20 @@ export default function InventoryModal({
 
           <input
             type="text"
-            name="location_name"
+            name="location"
             placeholder="Location Name"
-            value={formData.location.name}
+            value={formData.location}
             onChange={handleChange}
             className="border p-2 rounded"
           />
- <input
-            type="text"
+
+          <input
+            type="file"
             name="item_image"
-            placeholder="picture name"
-            value={formData.item_image}
             onChange={handleChange}
             className="border p-2 rounded"
           />
+
           <div className="flex justify-between mb-20">
             <button
               type="button"
@@ -269,11 +318,11 @@ export default function InventoryModal({
             </button>
 
             <button
-              disabled={isloading}
+              disabled={isLoading}
               type="submit"
               className="bg-blue-600 px-4 py-2 rounded text-white"
             >
-              {isloading ? "Submitting..." : "Submit"}
+              {isLoading ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

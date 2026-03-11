@@ -9,6 +9,7 @@ import PublicRoute from "../Layouts/publicRoute";
 import PrivateRoute from "../Layouts/privateRoute";
 import Storage from "../Pages/Storage";
 import Update from "../Pages/Update";
+import UpdateLocation from "../Pages/UpdateLocation";
 
 export default function AppRoutes() {
   return (
@@ -29,6 +30,7 @@ export default function AppRoutes() {
         {/* Private routes */}
         <Route element={<PrivateRoute/>}>
         <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/location" element={<UpdateLocation />} />
         </Route>
       </Routes>
     </BrowserRouter>

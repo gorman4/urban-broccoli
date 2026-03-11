@@ -11,6 +11,7 @@ import { RiWeightFill } from "react-icons/ri";
 import { FcServices, FcProcess } from "react-icons/fc";
 import { TbTruckDelivery } from "react-icons/tb";
 import { HiOutlineCalendarDateRange } from "react-icons/hi2";
+import { API_PATHS } from '../Lib/apiPath';
 
 export default function TrackingModal({
   ismodalOpen,
@@ -27,7 +28,7 @@ export default function TrackingModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
 
-      <div className="bg-white w-[90%] md:w-[70%] lg:w-[60%] h-[90vh] rounded-xl shadow-2xl p-6 relative overflow-auto">
+      <div className="bg-white w-[90%] md:w-[70%] lg:w-[60%] h-[90vh] rounded-xl shadow-2xl p-6 relative overflow-auto overflow-y-scroll">
 
         {/* Close */}
         <button
@@ -98,7 +99,7 @@ export default function TrackingModal({
             }`}
           >
             <h1 className="font-bold text-2xl flex items-center gap-3 my-4">
-              📦 Consignment Info
+              📦 Parcel Info
             </h1>
 
             <div className="grid md:grid-cols-2 gap-6 items-center">
@@ -106,7 +107,7 @@ export default function TrackingModal({
               {/* Image */}
               <div className="flex justify-center">
                 <img
-                  src={Img}
+                  src={`${API_PATHS.BASE_URL}/uploads/${trackingData.inventory.itemimage}`}
                   className="w-[220px] drop-shadow-lg"
                 />
               </div>
