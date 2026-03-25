@@ -5,7 +5,7 @@ import { ImLocation } from "react-icons/im";
 import type { MapProps, TrackingModalProps } from "../Lib/data";
 import "leaflet/dist/leaflet.css";
 import MapComponent from "./MapComponent";
-import Img from "../assets/delivery.png";
+
 
 import { RiWeightFill } from "react-icons/ri";
 import { FcServices, FcProcess } from "react-icons/fc";

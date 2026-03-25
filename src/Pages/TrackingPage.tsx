@@ -5,7 +5,7 @@ import PackingStorageComponent from "../Components/PackingStorageComponent";
 import RequestQuoteComponent from "../Components/RequestQuoteComponent";
 import TestimonialSection from "../Components/TestimonialSection";
 import TopBar from "../Components/TopBar";
-import TrackerComponent from "../Components/TrackerComponent";
+
 import LatestNews from '../Components/LatestNews';
 import SponsorComponent from "../Components/SponsorComponent";
 import AboutusComponent from "../Components/AboutusComponent";
@@ -17,7 +17,7 @@ export default function TrackingPage() {
     <div className="bg-background pt-3">
          <TopBar />
          <Carousel />
-         <TrackerComponent />
+       
          <div className="mt-25">
            <NumberCaption desc="Packing & Storage" num={"01"} />
          </div>

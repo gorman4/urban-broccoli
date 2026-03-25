@@ -1,7 +1,8 @@
 //Api endpoint will be stored and structured here
+//http://localhost:8000
 
 export const API_PATHS ={
-        BASE_URL: "http://localhost:8000",
+        BASE_URL: "https://backend-pmoz.onrender.com",
         AUTH:{
             REGISTER:"/api/v1/register",
             LOGIN:"/api/v1/login",
