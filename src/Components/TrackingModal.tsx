@@ -5,6 +5,7 @@ import { ImLocation } from "react-icons/im";
 import type { MapProps, TrackingModalProps } from "../Lib/data";
 import "leaflet/dist/leaflet.css";
 import MapComponent from "./MapComponent";
+import { FaMapLocationDot } from "react-icons/fa6";
 
 
 import { RiWeightFill } from "react-icons/ri";
@@ -56,6 +57,7 @@ export default function TrackingModal({
               <FaUserLarge />
               Receiver's Details
             </h1>
+            <h4 className="flex items-center gap-3 pb-2 font-bold"><FaMapLocationDot color="blue" size={30} /> Current:<span className="text-gray-700"> {trackingData.inventory.currentposition}</span></h4>
 
             <table className="w-full border border-gray-200 rounded-lg overflow-hidden font-semibold shadow-sm">
               <tbody className="[&>tr>td:nth-child(1)]:bg-blue-900 [&>tr>td:nth-child(1)]:text-white">
