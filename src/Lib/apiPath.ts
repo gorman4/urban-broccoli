@@ -1,8 +1,8 @@
 //Api endpoint will be stored and structured here
-//http://localhost:8000
+
 
 export const API_PATHS ={
-        BASE_URL: "http://localhost:8000" ,  //"https://backend-pmoz.onrender.com"
+        BASE_URL: "https://backend-1-jahu.onrender.com" ,  //"https://backend-pmoz.onrender.com" -  http://localhost:8000
         AUTH:{
             REGISTER:"/api/v1/register",
             LOGIN:"/api/v1/login",
@@ -14,7 +14,8 @@ export const API_PATHS ={
             UPDATE:"/api/v1/update",
             GETALL:"/api/v1/inventory",
             ACTIVATE:"/api/v1/activate?uuid=",
-            UPDATELOCATION:"/api/v1/update"
+            UPDATELOCATION:"/api/v1/update",
+            DELETE:"/api/v1/delete?uuid="
 
 
         },

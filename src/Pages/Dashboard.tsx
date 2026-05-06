@@ -93,6 +93,16 @@ const Dashboard = () => {
   //const [parcelList, setParcelList]= useState(null)
   const { logout } = useAuth();
 
+ const  deleteParcel = async (id: string) => {
+  console.log(id)
+    try {
+      await axiosInstance.delete(`${API_PATHS.INVENTORY.DELETE}${id}`);
+      fetchInventories();
+    } catch (err) {
+      console.error("Error deleting parcel:", err);
+    }
+  };
+
   const handleChangeStatus = async (id: string) => {
     // find the parcel in state
     const parcel = parcelList.find((item) => item.uuid === id);
@@ -204,7 +214,7 @@ const Dashboard = () => {
                       </td>
 
                       <td className="px-6 py-4 text-right">
-                        <button className="px-4 py-1.5 rounded-md bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 hover:border-red-400 transition duration-200">
+                        <button onClick ={() => deleteParcel(item.uuid)} className="px-4 py-1.5 rounded-md bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 hover:border-red-400 transition duration-200">
                           Cancel
                         </button>
                       </td>
