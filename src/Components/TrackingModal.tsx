@@ -109,7 +109,7 @@ export default function TrackingModal({
               {/* Image */}
               <div className="flex justify-center">
                 <img
-                  src={`${API_PATHS.BASE_URL}/uploads/${trackingData.inventory.itemimage}`}
+                  src={`${trackingData.inventory.itemimage}`}
                   className="w-[220px] drop-shadow-lg"
                 />
               </div>

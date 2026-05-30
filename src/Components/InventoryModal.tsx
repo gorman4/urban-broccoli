@@ -28,7 +28,7 @@ type InventoryFormData = {
 
   expected_delivery: string;
   current_position: string;
-  location: string; // now a simple string
+  location: string;
 };
 
 export default function InventoryModal({
@@ -60,27 +60,32 @@ export default function InventoryModal({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null); // Image preview
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
-    if (name === "item_image" && files) {
-      console.log("Selected file:", files[0]);
+
+    if (name === "item_image" && files && files.length > 0) {
+      const file = files[0];
+      console.log("Selected file:", file);
 
       setFormData((prev) => ({
         ...prev,
-        item_image: files[0],
+        item_image: file,
       }));
-    } else if (name === "quantity") {
+
+      // Generate preview
+      const reader = new FileReader();
+      reader.onloadend = () => setPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } 
+    else if (name === "quantity" || name === "completion") {
       setFormData((prev) => ({
         ...prev,
-        quantity: Number(value),
+        [name]: value === "" ? 0 : Number(value),
       }));
-    } else if (name === "location") {
-      setFormData((prev) => ({
-        ...prev,
-        location: value,
-      }));
-    } else {
+    } 
+    else {
       setFormData((prev) => ({
         ...prev,
         [name]: value,
@@ -95,6 +100,7 @@ export default function InventoryModal({
     try {
       const form = new FormData();
 
+      // Append all fields
       form.append("receiver_name", formData.receiver_name);
       form.append("receiver_address", formData.receiver_address);
       form.append("receiver_email", formData.receiver_email);
@@ -112,31 +118,29 @@ export default function InventoryModal({
       form.append("origin", formData.origin);
       form.append("destination", formData.destination);
       form.append("current_position", formData.current_position);
-
-      form.append("status", "Pending");
       form.append("location", formData.location);
+      form.append("status", "Pending");
 
       if (formData.item_image) {
         form.append("item_image", formData.item_image);
-      }
+      }else {
+            console.log("❌ No image selected");
+        }
 
-      for (let [key, value] of form.entries()) {
-        console.log(key, value);
-      }
-      const response = await axiosInstance.post(
-        API_PATHS.INVENTORY.INSERT,
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // ← let axios set boundary automatically
-            // or even better — just remove this line completely
-          },
-        },
-      );
+   const response = await axiosInstance.post(
+            API_PATHS.INVENTORY.INSERT, 
+            form,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data", // Optional but sometimes helps
+                },
+            }
+        );
 
-      console.log("Response:", response.data);
+        console.log("Response:", response.data);
 
       if (response?.data?.success) {
+        alert("Inventory added successfully!"); // You can replace with better toast later
         onSuccess();
         onClose();
       }
@@ -145,14 +149,12 @@ export default function InventoryModal({
 
       if (error.response) {
         console.log("Server Error:", error.response.data);
-        console.log("Status:", error.response.status);
+        alert(error.response.data?.message || "Failed to add inventory");
       } else if (error.request) {
-        console.log("No response received:", error.request);
+        alert("No response from server. Please check your connection.");
       } else {
-        console.log("Error Message:", error.message);
+        alert("Something went wrong!");
       }
-
-      alert("Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -170,6 +172,7 @@ export default function InventoryModal({
           onSubmit={handleSubmit}
           className="flex flex-col gap-3"
         >
+          {/* Receiver Details */}
           <input
             type="text"
             name="receiver_name"
@@ -177,6 +180,7 @@ export default function InventoryModal({
             value={formData.receiver_name}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
           <input
             type="text"
@@ -185,14 +189,16 @@ export default function InventoryModal({
             value={formData.receiver_address}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
           <input
-            type="text"
+            type="email"
             name="receiver_email"
             placeholder="Enter receiver email"
             value={formData.receiver_email}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
           <input
             type="text"
@@ -201,6 +207,28 @@ export default function InventoryModal({
             value={formData.receiver_phone}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
+          />
+
+          {/* Item Details */}
+          <input
+            type="text"
+            name="item_name"
+            placeholder="Item Name"
+            value={formData.item_name}
+            onChange={handleChange}
+            className="border p-2 rounded"
+            required
+          />
+
+          <input
+            type="number"
+            name="quantity"
+            placeholder="Quantity"
+            value={formData.quantity > 0 ? formData.quantity : ""}
+            onChange={handleChange}
+            className="border p-2 rounded"
+            required
           />
 
           <input
@@ -210,7 +238,31 @@ export default function InventoryModal({
             value={formData.weight}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
+
+          {/* Image Upload + Preview */}
+          <input
+            type="file"
+            name="item_image"
+            onChange={handleChange}
+            className="border p-2 rounded"
+            accept="image/*"
+            required
+          />
+
+          {preview && (
+            <div className="mt-2">
+              <p className="text-sm font-medium">Image Preview:</p>
+              <img
+                src={preview}
+                alt="preview"
+                className="w-full h-40 object-cover rounded border"
+              />
+            </div>
+          )}
+
+          {/* Other Fields */}
           <input
             type="text"
             name="service"
@@ -218,7 +270,9 @@ export default function InventoryModal({
             value={formData.service}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
+
           <input
             type="text"
             name="delivery_mode"
@@ -226,6 +280,7 @@ export default function InventoryModal({
             value={formData.delivery_mode}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
 
           <div className="flex items-end gap-2">
@@ -236,6 +291,8 @@ export default function InventoryModal({
               value={formData.completion}
               onChange={handleChange}
               className="border p-2 rounded flex-1"
+              min="0"
+              max="100"
             />
             <span className="font-bold">% completed</span>
           </div>
@@ -243,28 +300,10 @@ export default function InventoryModal({
           <input
             type="date"
             name="expected_delivery"
-            placeholder="Enter delivery date"
             value={formData.expected_delivery}
             onChange={handleChange}
             className="border p-2 rounded"
-          />
-
-          <input
-            type="text"
-            name="item_name"
-            placeholder="Item Name"
-            value={formData.item_name}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-
-          <input
-            type="number"
-            name="quantity"
-            placeholder="Quantity"
-            value={formData.quantity > 0 ? formData.quantity : ""}
-            onChange={handleChange}
-            className="border p-2 rounded"
+            required
           />
 
           <input
@@ -274,6 +313,7 @@ export default function InventoryModal({
             value={formData.origin}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
           <input
             type="text"
@@ -282,6 +322,7 @@ export default function InventoryModal({
             value={formData.destination}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
           <input
             type="text"
@@ -290,6 +331,7 @@ export default function InventoryModal({
             value={formData.current_position}
             onChange={handleChange}
             className="border p-2 rounded"
+            required
           />
 
           <input
@@ -299,20 +341,14 @@ export default function InventoryModal({
             value={formData.location}
             onChange={handleChange}
             className="border p-2 rounded"
-          />
-
-          <input
-            type="file"
-            name="item_image"
-            onChange={handleChange}
-            className="border p-2 rounded"
+            required
           />
 
           <div className="flex justify-between mb-20">
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-400 px-4 py-2 rounded text-white"
+              className="bg-gray-400 px-4 py-2 rounded text-white hover:bg-gray-500"
             >
               Cancel
             </button>
@@ -320,7 +356,7 @@ export default function InventoryModal({
             <button
               disabled={isLoading}
               type="submit"
-              className="bg-blue-600 px-4 py-2 rounded text-white"
+              className="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700 disabled:bg-blue-300"
             >
               {isLoading ? "Submitting..." : "Submit"}
             </button>
