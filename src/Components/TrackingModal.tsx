@@ -12,7 +12,7 @@ import { RiWeightFill } from "react-icons/ri";
 import { FcServices, FcProcess } from "react-icons/fc";
 import { TbTruckDelivery } from "react-icons/tb";
 import { HiOutlineCalendarDateRange } from "react-icons/hi2";
-import { API_PATHS } from '../Lib/apiPath';
+
 
 export default function TrackingModal({
   ismodalOpen,
