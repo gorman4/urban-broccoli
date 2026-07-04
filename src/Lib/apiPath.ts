@@ -2,7 +2,7 @@
 
 
 export const API_PATHS ={
-        BASE_URL: "https://backend-1-jahu.onrender.com",                           //"https://backend-1-jahu.onrender.com" ,  //"https://backend-pmoz.onrender.com" -  http://localhost:8000
+        BASE_URL: "https://backend-1-jahu.onrender.com",                           //production - "https://backend-1-jahu.onrender.com" ,  //"https://backend-pmoz.onrender.com" -  http://localhost:8000
         AUTH:{
             REGISTER:"/api/v1/register",
             LOGIN:"/api/v1/login",
